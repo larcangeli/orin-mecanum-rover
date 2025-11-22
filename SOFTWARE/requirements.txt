@@ -1,0 +1,28 @@
+# Python dependencies for the Orin Mecanum Rover project
+# Install with: pip install -r requirements.txt
+
+# Deep Learning and Computer Vision
+torch>=2.0.0
+torchvision>=0.15.0
+opencv-python>=4.8.0
+ultralytics>=8.0.0  # YOLO
+
+# TensorRT (requires NVIDIA GPU and TensorRT installation)
+# tensorrt>=8.6.0
+# pycuda>=2022.1
+
+# ROS 2 Python bindings (typically installed via apt, not pip)
+# rclpy
+# std_msgs
+# sensor_msgs
+# geometry_msgs
+
+# Hardware Interface
+adafruit-circuitpython-pca9685>=3.4.0  # PCA9685 PWM driver
+adafruit-circuitpython-motor>=3.3.0
+Jetson.GPIO==2.1.6  # Jetson GPIO library (pinned for Orin Nano compatibility)
+
+# Utilities
+numpy>=1.24.0
+matplotlib>=3.7.0
+pillow>=10.0.0
