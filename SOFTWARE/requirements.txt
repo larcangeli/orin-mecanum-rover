@@ -20,7 +20,7 @@ ultralytics>=8.0.0  # YOLO
 # Hardware Interface
 adafruit-circuitpython-pca9685>=3.4.0  # PCA9685 PWM driver
 adafruit-circuitpython-motor>=3.3.0
-Jetson.GPIO>=2.1.0  # Jetson GPIO library (compatible with Orin Nano)
+Jetson.GPIO==2.1.6  # Jetson GPIO library (pinned for Orin Nano compatibility)
 
 # Utilities
 numpy>=1.24.0

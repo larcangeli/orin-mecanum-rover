@@ -73,7 +73,6 @@ log/
 # Compiled files
 *.o
 *.a
-*.so
 *.dylib
 *.exe
 *.out
@@ -83,7 +82,6 @@ _build/
 .doctrees/
 
 # Temporary files
-*.tmp
 *.temp
 temp/
 tmp/
