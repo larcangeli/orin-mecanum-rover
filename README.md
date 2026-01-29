@@ -65,44 +65,60 @@ graph TD
     %% Power Source
     PB[Powerbank 12V 15A]
     
-    %% Main Components
+    %% Main Compute & Logic
     Jetson[NVIDIA Jetson Orin Nano]
+    LLC[Logic Level Converter]
+    Arduino[Arduino Nano V3]
+    
+    %% Actuation & Drivers
     PCA[PCA9685 PWM Driver]
     DriverL[BTS7960 Driver Left]
     DriverR[BTS7960 Driver Right]
     MotorsL[Motors Left x2]
     MotorsR[Motors Right x2]
+    
+    %% Sensors
     Encoders[Encoders x4]
     Lidar[RPLIDAR C1]
     
-    %% Power Lines (Red/Thick)
-    PB == "12V DC Port (18AWG Cable)" ==> Jetson
-    PB == "12V Cigarette Port (High Current)" ==> DriverL
-    PB == "12V Cigarette Port (High Current)" ==> DriverR
+    %% --- POWER DISTRIBUTION (Red/Thick Lines) ---
+    PB == "12V DC Port (18AWG)" ==> Jetson
+    PB == "12V High Current" ==> DriverL
+    PB == "12V High Current" ==> DriverR
     
-    %% Logic Power (Blue)
-    Jetson -- "3.3V Logic Power" --> PCA
-    Jetson -- "5V Logic Power" --> DriverL
-    Jetson -- "5V Logic Power" --> DriverR
+    %% Low Voltage Power (Blue Lines)
+    Jetson -- "5V Pin Power" --> Arduino
+    Arduino -- "5V Logic Power" --> PCA
+    Arduino -- "5V Logic Power" --> DriverL
+    Arduino -- "5V Logic Power" --> DriverR
     
-    %% Data/Signals (Green/Dotted)
-    Jetson -. "I2C Data" .-> PCA
+    %% --- DATA & CONTROL SIGNALS (Green/Dotted Lines) ---
+    %% Communication Stack
+    Jetson -. "UART TX/RX (3.3V)" .-> LLC
+    LLC -. "UART TX/RX (5V)" .-> Arduino
+    
+    %% Motor Control Logic
+    Arduino -. "I2C Data (SDA/SCL)" .-> PCA
     PCA -- "PWM Sig" --> DriverL
     PCA -- "PWM Sig" --> DriverR
     
-    %% Motor Power
+    %% Drive Output
     DriverL == "Variable 12V" ==> MotorsL
     DriverR == "Variable 12V" ==> MotorsR
     
-    %% Feedback Loop
-    Encoders -. "GPIO Interrupts (Phase A/B)" .-> Jetson
+    %% Feedback & Sensors
+    Encoders -. "Interrupts (Phase A/B 5V)" .-> Arduino
     Lidar -. "USB Data" .-> Jetson
     
-    %% Styles
+    %% --- STYLING ---
     classDef power fill:#f96,stroke:#333,stroke-width:2px;
     classDef compute fill:#69f,stroke:#333,stroke-width:2px;
+    classDef microcontroller fill:#fff,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5;
     classDef actuator fill:#9f6,stroke:#333,stroke-width:2px;
+    classDef component fill:#ff9,stroke:#333,stroke-width:1px;
     
     class PB power;
     class Jetson compute;
+    class Arduino microcontroller;
     class DriverL,DriverR,MotorsL,MotorsR actuator;
+    class LLC,PCA,Encoders,Lidar component;
